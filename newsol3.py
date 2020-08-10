@@ -279,7 +279,7 @@ print(kr82Value)
 print(sr86Value)
 print(sr87Value)
 
-# print(np.log10(ge70Value[0]/solarM[Ge70][0]))
+# print(np.log10(ge70Value[0]/solarM[Ge70][0])).
 # print(np.log10(se76Value[0]/solarM[Se76][0]))
 # print(np.log10(kr80Value[0]/solarM[Kr80][0]))
 # print(np.log10(kr82Value[0]/solarM[Kr82][0]))
