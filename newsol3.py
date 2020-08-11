@@ -15,7 +15,7 @@ from sympy import symbols, Eq, solve, nonlinsolve
 numiso = 287
 
 
-#GET SOLAR ABUN..。!
+#GET SOLAR ABUN..。! Testing branching!!
 
 dirname = os.path.dirname(__file__)
 sollo20File = os.path.join(dirname, 'sollo20.dat')
