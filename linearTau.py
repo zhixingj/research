@@ -10,7 +10,7 @@ from w_cs import w_cs
 from weak_source import weak_source
 from matrix import matrix
 from branch import  branch
-from sympy import symbols, Eq, solve, nonlinsolve
+from sympy import symbols, Eq, solve, nonlinsolve, Matrix, zeros
 
 numiso = 287
 
@@ -141,6 +141,7 @@ sig=w_cs(ion,nion)
 # b=branch(sion)
 
 f1,k1,f2,k2 = symbols('f1 k1 f2 k2')
+
 #
 # f1 = 1/100
 # k1 = 0.03
@@ -167,8 +168,9 @@ firstPosition = firstBranch[0][0]
 
 init_A = 1
 init_B = 1
-final_A = np.empty(nion.size, dtype = "object")
-final_B = np.empty(nion.size, dtype = "object")
+final_A = zeros(nion.size,1)
+print(final_A)
+final_B = zeros(nion.size,1)
 
 
 for i in range(0,firstPosition):
@@ -294,7 +296,6 @@ init3_B = br81_B
 for i in range(br81Position+1, ruPosition+1):
     init3_B = init3_B * 1/(1+(1/(k2*sig[i])))
     final_B[i] = init3_B
-
 
 final_A = final_A * factorOneA
 final_A = final_A/sig
