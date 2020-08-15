@@ -169,8 +169,11 @@ firstPosition = firstBranch[0][0]
 init_A = 1
 init_B = 1
 final_A = zeros(nion.size,1)
-print(final_A)
 final_B = zeros(nion.size,1)
+final_A[1]=1
+final_B[1]=2
+final = final_A+final_B
+
 
 
 for i in range(0,firstPosition):
@@ -179,7 +182,6 @@ for i in range(0,firstPosition):
 for i in range(0,firstPosition):
     init_B = init_B * 1/(1+(1/(k2*sig[i])))
     final_B[i] = init_B
-
 
 cu641_A = final_A[firstPosition-1] * (1/(1-0.3311)+(1/(k1*sig[firstPosition])))**(-1)
 cu642_A = final_A[firstPosition-1] * (1/(0.3311)+(1/(k1*sig[firstPosition])))**(-1)
@@ -291,19 +293,23 @@ init3_A = br81_A
 for i in range(br81Position+1, ruPosition+1):
     init3_A = init3_A * 1/(1+(1/(k1*sig[i])))
     final_A[i] = init3_A
-
+print('now: ',final_A.shape)
 init3_B = br81_B
 for i in range(br81Position+1, ruPosition+1):
     init3_B = init3_B * 1/(1+(1/(k2*sig[i])))
     final_B[i] = init3_B
 
 final_A = final_A * factorOneA
-final_A = final_A/sig
 final_B = final_B * factorOneB
-final_B = final_B/sig
+
+for i in range(sig.shape[0]):
+    final_A[i] = final_A[i]/sig[i]
+    final_B[i] = final_B[i]/sig[i]
+print('now: ',final_A.shape)
 
 final = final_A + final_B
-# print(final)
+print('now: final',final.shape)
+
 
 Ge70=np.where(nion == 'ge70')
 Se76=np.where(nion == 'se76')
@@ -312,7 +318,7 @@ Kr82=np.where(nion == 'kr82')
 Sr86=np.where(nion == 'sr86')
 Sr87=np.where(nion == 'sr87')
 
-print(final[Ge70])
+print('Ge70',final[Ge70[0][0]])
 
 
 # ge70Value = final[Ge70]
