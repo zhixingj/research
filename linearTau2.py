@@ -10,14 +10,13 @@ from w_cs import w_cs
 from weak_source import weak_source
 from matrix import matrix
 from branch import  branch
-from sympy import symbols, Eq, solve, nonlinsolve, Matrix, zeros
-from gradientDescenrt import gradDescent
-import tensorflow as tf
+from sympy import *
+
+
+#GET SOLAR ABUN
 
 
 numiso = 287
-
-#GET SOLAR ABUN
 
 dirname = os.path.dirname(__file__)
 sollo20File = os.path.join(dirname, 'sollo20.dat')
@@ -144,7 +143,6 @@ sig=w_cs(ion,nion)
 # b=branch(sion)
 
 f1,k1,f2,k2 = symbols('f1 k1 f2 k2')
-
 #
 # f1 = 1/100
 # k1 = 0.03
@@ -171,20 +169,17 @@ firstPosition = firstBranch[0][0]
 
 init_A = 1
 init_B = 1
-final_A = zeros(nion.size,1)
-final_B = zeros(nion.size,1)
-final_A[1]=1
-final_B[1]=2
-final = final_A+final_B
-
+final_A = zeros(nion.size, 1)
+final_B = zeros(nion.size, 1)
 
 
 for i in range(0,firstPosition):
-    init_A = init_A * 1/(1+(1/(k1*sig[i])))
+    init_A = init_A * (1/(1+(1/(k1*sig[i]))))
     final_A[i] = init_A
 for i in range(0,firstPosition):
-    init_B = init_B * 1/(1+(1/(k2*sig[i])))
+    init_B = init_B * (1/(1+(1/(k2*sig[i]))))
     final_B[i] = init_B
+
 
 cu641_A = final_A[firstPosition-1] * (1/(1-0.3311)+(1/(k1*sig[firstPosition])))**(-1)
 cu642_A = final_A[firstPosition-1] * (1/(0.3311)+(1/(k1*sig[firstPosition])))**(-1)
@@ -239,10 +234,10 @@ init2_A = cu65_A
 init2_B = cu65_B
 
 for i in range(cu65Position+1,secondPosition):
-    init2_A = init2_A * 1/(1+(1/(k1*sig[i])))
+    init2_A = init2_A * (1/(1+(1/(k1*sig[i]))))
     final_A[i] = init2_A
 for i in range(cu65Position+1,secondPosition):
-    init2_B = init2_B * 1/(1+(1/(k2*sig[i])))
+    init2_B = init2_B * (1/(1+(1/(k2*sig[i]))))
     final_B[i] = init2_B
 
 br801_A = final_A[secondPosition-1] * (1/(1-0.0325)+(1/(k1*sig[secondPosition])))**(-1)
@@ -294,49 +289,162 @@ ruPosition = ruPo[0][0]
 
 init3_A = br81_A
 for i in range(br81Position+1, ruPosition+1):
-    init3_A = init3_A * 1/(1+(1/(k1*sig[i])))
+    init3_A = init3_A * (1/(1+(1/(k1*sig[i]))))
     final_A[i] = init3_A
-print('now: ',final_A.shape)
+
 init3_B = br81_B
 for i in range(br81Position+1, ruPosition+1):
-    init3_B = init3_B * 1/(1+(1/(k2*sig[i])))
+    init3_B = init3_B * (1/(1+(1/(k2*sig[i]))))
     final_B[i] = init3_B
 
+
 final_A = final_A * factorOneA
+
 final_B = final_B * factorOneB
 
 for i in range(sig.shape[0]):
     final_A[i] = final_A[i]/sig[i]
     final_B[i] = final_B[i]/sig[i]
-print('now: ',final_A.shape)
 
 final = final_A + final_B
-print('now: final',final.shape)
+
+#print(final)
+
+Ge70=np.where(nion == 'ge70')
+Se76=np.where(nion == 'se76')
+Kr80=np.where(nion == 'kr80')
+Kr82=np.where(nion == 'kr82')
+Sr86=np.where(nion == 'sr86')
+Sr87=np.where(nion == 'sr87')
 
 
-Ge70=np.where(nion == 'ge70')[0][0]
-Se76=np.where(nion == 'se76')[0][0]
-Kr80=np.where(nion == 'kr80')[0][0]
-Kr82=np.where(nion == 'kr82')[0][0]
-Sr86=np.where(nion == 'sr86')[0][0]
-Sr87=np.where(nion == 'sr87')[0][0]
+ge70Value = final[Ge70[0][0]]
+se76Value = final[Se76[0][0]]
+kr80Value = final[Kr80[0][0]]
+kr82Value = final[Kr82[0][0]]
+sr86Value = final[Sr86[0][0]]
+sr87Value = final[Sr87[0][0]]
 
-# print('Ge70',final[Ge70[0][0]])
-f_1, f_2, k_1, k_2 = gradDescent(final, solarM, Ge70, Se76, Kr80)
-f_1 =float(f_1)
-f_2 = float(f_2)
-k_1 = float(k_1)
-k_2 = float(k_2)
-print('returned vLUES:', f_1, f_2, k_1, k_2)
-def getY():
-    print('Before log 10:', float(final[Ge70].subs([(f1, f_1), (f2, f_2), (k1, k_1), (k2, k_2)]))/solarM[Ge70])
-    return [np.log10(float(final[Ge70].subs([(f1, f_1), (f2, f_2), (k1, k_1), (k2, k_2)]))/solarM[Ge70]), np.log10(float(final[Se76].subs([(f1, f_1), (f2, f_2), (k1, k_1), (k2, k_2)]))/solarM[Se76]), np.log10(float(final[Kr80].subs([(f1, f_1), (f2, f_2), (k1, k_1), (k2, k_2)]))/solarM[Kr80]), np.log10(float(final[Kr82].subs([(f1, f_1), (f2, f_2), (k1, k_1), (k2, k_2)]))/solarM[Kr82]), np.log10(float(final[Sr86].subs([(f1, f_1), (f2, f_2), (k1, k_1), (k2, k_2)]))/solarM[Sr86]), np.log10(float(final[Sr87].subs([(f1, f_1), (f2, f_2), (k1, k_1), (k2, k_2)])/solarM[Sr87]))]
 
-def getIndex():
-    return [Ge70, Se76, Kr80, Kr82, Sr86, Sr87]
+Y = [4.536598118873798e-08,1.1232636058722698e-08,2.3270261883779354e-09,9.722929397028656e-09,2.4121406e-09,1.73246948e-09]
+X = [ge70Value,se76Value,kr80Value,kr82Value,sr86Value,sr87Value]
+lr = 0.01
 
-def getSolarM():
-    return solarM
+def update_weight(f11,f22,k11,k22,Y, X, lr):
+    f1_deriv = 0
+    f2_deriv = 0
+    k1_deriv = 0
+    k2_deriv = 0
+
+    N =  len(X)
+
+    for i in range(N):
+        isotope = X[i]
+        actual_Mionor_iso = Y[i]-isotope
+        f1fun = diff(isotope,f1)
+
+        substitute1 = 2*(actual_Mionor_iso)*f1fun*(-1)
+        substitute1 = substitute1.subs({f1:f11,f2:f22,k1:k11,k2:k22})
+        f1_deriv += substitute1
+
+
+        k1fun = diff(isotope,k1)
+        substitute2 = 2*(actual_Mionor_iso)*k1fun*(-1)
+        substitute2 = substitute2.subs({f1:f11,f2:f22,k1:k11,k2:k22})
+        k1_deriv += substitute2
+
+
+        ffun = diff(isotope,f2)
+        substitute3 = 2*(actual_Mionor_iso)*ffun*(-1)
+        substitute3 = substitute3.subs({f1:f11,f2:f22,k1:k11,k2:k22})
+        f2_deriv += substitute3
+
+        kkfun = diff(isotope,k2)
+        substitute4 = 2*(actual_Mionor_iso)*kkfun*(-1)
+        substitute4 = substitute4.subs({f1:f11,f2:f22,k1:k11,k2:k22})
+        k2_deriv += substitute4
+        #
+        # f2fun= diff(isotope,f2)
+        # substitute3 = 2*(actual_Mionor_iso*f2fun*(-1)
+        # substitute3 = substitute3.subs({f1:f11,f2:f22,k1:k11,k2:k22})
+        # f2_deriv +=  substitute3
+        #
+        # kfun = diff(isotope,k2)
+        # substitute4 = 2*(actual_Mionor_iso)*kfun*(-1)
+        # substitute4 = substitute4.subs({f1:f11,f2:f22,k1:k11,k2:k22})
+        # k2_deriv +=  substitute4
+#
+    f11 -= (f1_deriv / float(N)) * lr
+    f22 -= (f2_deriv / float(N)) * lr
+    k11 -= (k1_deriv / float(N)) * lr
+    k22 -= (k2_deriv / float(N)) * lr
+
+    return f11,k11,f22,k22
+
+def error(f111,k111,f222,k222):
+    N2 =  len(X)
+    err = 0
+    for i in range(N2):
+        iso = X[i]
+        iso = iso.subs({f1:f111,f2:f222,k1:k111,k2:k222})
+        iso_error = (iso-Y[i])**2
+        err += iso_error
+    return err
+
+
+
+f11,k11,f22,k22 = 0.2,0.2,0.8,0.8
+errorMin = 100
+f1Min = 100
+f2Min = 100
+k1Min = 100
+k2Min = 100
+for i in range(100000):
+    q,w,s,c, = update_weight(f11,k11,f22,k22,Y,X,lr)
+    errorNow = error(f11,k11,f22,k22)
+    if errorNow < errorMin:
+        f1Min = f11
+        f2Min = f22
+        k1Min = k11
+        k2Min = k22
+        errorMin = errorNow
+
+    f11 = q
+    k11 = w
+    f22 = s
+    k22 = c
+
+print(errorMin)
+print(f1Min)
+print(f2Min)
+print(k1Min)
+print(k2Min)
+
+
+
+
+#
+# sr87Value = sr87Value.subs({f1:1,f2:1,k1:2,k2:2})
+# print(sr87Value)
+    # print(solarM[Sr86])
+    # print(solarM[Sr87])
+
+
+
+
+    # print(solarM[Ge70][0])
+    # print(solarM[Se76][0])
+    # print(solarM[Kr80][0])
+    # print(solarM[Kr82][0])
+# print(final[Ge70][0])
+# print(final[Ge70][0])
+
+
+
+# solve_value = nsolve((final[Ge70][0],final[Se76][0],final[Kr80][0],final[Kr82][0]), (f1,k1,f2,k2), (1,1,1,1), verify=False)
+#
+# # f = simplify(final[Ge70])
+# print(solve_value)
 
 
 # ge70Value = final[Ge70]
