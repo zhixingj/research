@@ -322,7 +322,7 @@ Sr86=np.where(nion == 'sr86')[0][0]
 Sr87=np.where(nion == 'sr87')[0][0]
 
 # print('Ge70',final[Ge70[0][0]])
-f_1, f_2, k_1, k_2 = gradDescent(final, solarM, Ge70, Se76, Kr80)
+f_1, f_2, k_1, k_2 = gradDescent(final, solarM, Kr82, Sr86, Sr87)
 f_1 =float(f_1)
 f_2 = float(f_2)
 k_1 = float(k_1)
