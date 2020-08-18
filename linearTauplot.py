@@ -1,4 +1,4 @@
-# f 0.4 0.49 t 0.02 0.034
+#f 0.4 0.49 t 0.02 0.034
 
 import numpy as np
 import os
