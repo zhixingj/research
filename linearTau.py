@@ -322,15 +322,18 @@ Sr86=np.where(nion == 'sr86')[0][0]
 Sr87=np.where(nion == 'sr87')[0][0]
 
 # print('Ge70',final[Ge70[0][0]])
-f_1, f_2, k_1, k_2 = gradDescent(final, solarM, Ge70, Se76, Kr80, Kr82, Sr86, Sr87)
-f_1 =float(f_1)
-f_2 = float(f_2)
-k_1 = float(k_1)
-k_2 = float(k_2)
+# f_1, f_2, k_1, k_2 = gradDescent(final, solarM, Ge70, Se76, Kr80, Kr82, Sr86, Sr87)
+# print("-----------Testing type: ", np.log10(float(final[Ge70].subs([(f1, 0.1), (f2, 0.2), (k1, 0.5), (k2, 0.2)])/solar[Ge70])))
+f_1, f_2, k_1, k_2 = gradDescent(final, solarM, Se76, Kr82, Sr86)
+
 print('returned vLUES:', f_1, f_2, k_1, k_2)
 def getY():
-    print('Before log 10:', float(final[Ge70].subs([(f1, f_1), (f2, f_2), (k1, k_1), (k2, k_2)]))/solarM[Ge70])
-    return [np.log10(float(final[Ge70].subs([(f1, f_1), (f2, f_2), (k1, k_1), (k2, k_2)]))/solarM[Ge70]), np.log10(float(final[Se76].subs([(f1, f_1), (f2, f_2), (k1, k_1), (k2, k_2)]))/solarM[Se76]), np.log10(float(final[Kr80].subs([(f1, f_1), (f2, f_2), (k1, k_1), (k2, k_2)]))/solarM[Kr80]), np.log10(float(final[Kr82].subs([(f1, f_1), (f2, f_2), (k1, k_1), (k2, k_2)]))/solarM[Kr82]), np.log10(float(final[Sr86].subs([(f1, f_1), (f2, f_2), (k1, k_1), (k2, k_2)]))/solarM[Sr86]), np.log10(float(final[Sr87].subs([(f1, f_1), (f2, f_2), (k1, k_1), (k2, k_2)])/solarM[Sr87]))]
+    Ys = []
+    for iso in [Ge70, Se76, Kr80, Kr82, Sr86, Sr87]:
+        ratio = final[iso].subs([(f1, f_1), (f2, f_2), (k1, k_1), (k2, k_2)])/solarM[iso]
+        # print('The ratio is:', ratio)
+        Ys.append(np.log10(float(ratio)))
+    return Ys
 
 def getIndex():
     return [Ge70, Se76, Kr80, Kr82, Sr86, Sr87]

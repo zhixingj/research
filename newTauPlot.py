@@ -404,7 +404,7 @@ axes.scatter(sOnlyM, array2, marker = '*')
 axes.set_xlim([56,105])
 axes.set_ylim([-5,1])
 plt.axhline(y=0, color='r', linestyle='--')
-plt.show()
+plt.show(block = True)
 
 
 # ppplot= plt.figure()

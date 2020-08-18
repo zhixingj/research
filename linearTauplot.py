@@ -1,4 +1,4 @@
-# f 0.4 0.49 t 0.02 0.034
+#f 0.4 0.49 t 0.02 0.034
 
 import numpy as np
 import os
@@ -148,10 +148,10 @@ sig=w_cs(ion,nion)
 
 # f1,k1,f2,k2 = symbols('f1 k1 f2 k2')
 #
-f1 = 0.0073
-k1 = 0.634
-f2 = 0.296
-k2 = 0.035
+f1 = 0.37
+k1 = 0.03
+f2 = 0.29
+k2 = 0.03
 
 # min = 1000
 # minF = 1000
@@ -173,8 +173,8 @@ firstPosition = firstBranch[0][0]
 
 init_A = 1
 init_B = 1
-final_A = np.empty(nion.size, dtype = "object")
-final_B = np.empty(nion.size, dtype = "object")
+final_A = zeros(nion.size, 1)
+final_B = zeros(nion.size, 1)
 
 
 for i in range(0,firstPosition):
@@ -303,14 +303,17 @@ for i in range(br81Position+1, ruPosition+1):
 
 
 final_A = final_A * factorOneA
-final_A = final_A/sig
 final_B = final_B * factorOneB
-final_B = final_B/sig
+for i in range(sig.shape[0]):
+    final_A[i] = final_A[i]/sig[i]
+    final_B[i] = final_B[i]/sig[i]
+
 
 final = final_A + final_B
 final_type = np.asarray(final).astype(np.float64)
-finalRatio = final_type/solar
-
+finalRatio = []
+for i in range(solar.shape[0]):
+    finalRatio.append(final_type[i]/solar[i])
 
 #print(final)
 
@@ -321,12 +324,12 @@ Kr82=np.where(nion == 'kr82')
 Sr86=np.where(nion == 'sr86')
 Sr87=np.where(nion == 'sr87')
 
-ge70Value = final[Ge70][0]
-se76Value = final[Se76][0]
-kr80Value = final[Kr80][0]
-kr82Value = final[Kr82][0]
-sr86Value = final[Sr86][0]
-sr87Value = final[Sr87][0]
+ge70Value = final[Ge70[0][0]]
+se76Value = final[Se76[0][0]]
+kr80Value = final[Kr80[0][0]]
+kr82Value = final[Kr82[0][0]]
+sr86Value = final[Sr86[0][0]]
+sr87Value = final[Sr87[0][0]]
 
 
 sOnlyM = np.zeros(6)
@@ -337,12 +340,12 @@ sOnlyM[3] = mass[Kr82]
 sOnlyM[4] = mass[Sr86]
 sOnlyM[5] = mass[Sr87]
 
-a3 = np.log10(ge70Value / solar[Ge70][0])
-b3 = np.log10(se76Value / solar[Se76][0])
-c3 = np.log10(kr80Value / solar[Kr80][0])
-d3 = np.log10(kr82Value / solar[Kr82][0])
-w3 = np.log10(sr86Value / solar[Sr86][0])
-q3 = np.log10(sr87Value / solar[Sr87][0])
+a3 = np.log10(float(ge70Value / solar[Ge70[0]]))
+b3 = np.log10(float(se76Value / solar[Se76[0]]))
+c3 = np.log10(float(kr80Value / solar[Kr80[0]]))
+d3 = np.log10(float(kr82Value / solar[Kr82[0]]))
+w3 = np.log10(float(sr86Value / solar[Sr86[0]]))
+q3 = np.log10(float(sr87Value / solar[Sr87[0]]))
 
 # aa3 = np.log10((solar[Ge70][0]-mains_process[Ge70][0])/solar[Ge70][0])
 # bb3 = np.log10((solar[Se76][0]-mains_process[Se76][0])/solar[Se76][0])
