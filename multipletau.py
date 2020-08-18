@@ -178,7 +178,7 @@ def multipleTau(numberE):
         firstPosition = firstBranch[0][0]
 
         init = 1
-        final = np.empty(nion.size, dtype = "object")
+        final = zeros(nion.size, 1)
 
         for i in range(0,firstPosition):
             init = init * 1/(1+(1/(tauValue[j]*sig[i])))
