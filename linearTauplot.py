@@ -326,7 +326,7 @@ Kr82=np.where(nion == 'kr82')
 Sr86=np.where(nion == 'sr86')
 Sr87=np.where(nion == 'sr87')
 
-N = 5
+N = 10
 final = multipleTau(N)
 
 allWsIso = [Ge70[0][0], Se76[0][0], Kr80[0][0], Kr82[0][0], Sr86[0][0], Sr87[0][0]]
