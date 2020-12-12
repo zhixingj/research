@@ -8,10 +8,11 @@ def w_cs(ion, sion):
 
     # ;-KADONIS MACS-
 
-    if kadonis == 1:
+    if kadonis == 0:
         dirname = os.path.dirname(__file__)
         kadonisFile = os.path.join(dirname, 'kadonis_macs.dat')
         kadonis_macs = np.loadtxt(kadonisFile, usecols = 1)
+
         # kadonis_macs = kadonis_macs[1:-2]
 
         kad_s = kadonis_macs
@@ -62,6 +63,7 @@ def w_cs(ion, sion):
 
 
     return sig
+
 
 
 '''

@@ -13,7 +13,9 @@ from weak_source import weak_source
 from matrix import matrix
 from branch import  branch
 from sympy import *
-
+from gradientDescent import gradDescent
+from multipletau import multipleTau
+from calculateWs import calculateYs
 
 #GET SOLAR ABUN
 # def linearTau(a):
@@ -315,7 +317,7 @@ finalRatio = []
 for i in range(solar.shape[0]):
     finalRatio.append(final_type[i]/solar[i])
 
-#print(final)
+
 
 Ge70=np.where(nion == 'ge70')
 Se76=np.where(nion == 'se76')
@@ -323,6 +325,14 @@ Kr80=np.where(nion == 'kr80')
 Kr82=np.where(nion == 'kr82')
 Sr86=np.where(nion == 'sr86')
 Sr87=np.where(nion == 'sr87')
+
+N = 10
+final = multipleTau(N)
+
+allWsIso = [Ge70[0][0], Se76[0][0], Kr80[0][0], Kr82[0][0], Sr86[0][0], Sr87[0][0]]
+minF, minK = gradDescent(final, solarM, allWsIso, N)
+
+Ys = calculateYs(minF, minK, final, solarM, allWsIso, N)
 
 ge70Value = final[Ge70[0][0]]
 se76Value = final[Se76[0][0]]
@@ -340,19 +350,19 @@ sOnlyM[3] = mass[Kr82]
 sOnlyM[4] = mass[Sr86]
 sOnlyM[5] = mass[Sr87]
 
-a3 = np.log10(float(ge70Value / solar[Ge70[0]]))
-b3 = np.log10(float(se76Value / solar[Se76[0]]))
-c3 = np.log10(float(kr80Value / solar[Kr80[0]]))
-d3 = np.log10(float(kr82Value / solar[Kr82[0]]))
-w3 = np.log10(float(sr86Value / solar[Sr86[0]]))
-q3 = np.log10(float(sr87Value / solar[Sr87[0]]))
+# a3 = np.log10(float(ge70Value / solar[Ge70[0]]))
+# b3 = np.log10(float(se76Value / solar[Se76[0]]))
+# c3 = np.log10(float(kr80Value / solar[Kr80[0]]))
+# d3 = np.log10(float(kr82Value / solar[Kr82[0]]))
+# w3 = np.log10(float(sr86Value / solar[Sr86[0]]))
+# q3 = np.log10(float(sr87Value / solar[Sr87[0]]))
 
-# aa3 = np.log10((solar[Ge70][0]-mains_process[Ge70][0])/solar[Ge70][0])
-# bb3 = np.log10((solar[Se76][0]-mains_process[Se76][0])/solar[Se76][0])
-# cc3 = np.log10((solar[Kr80][0]-mains_process[Kr80][0])/solar[Kr80][0])
-# dd3 = np.log10((solar[Kr82][0]-mains_process[Kr82][0])/solar[Kr82][0])
-# ww3 = np.log10((solar[Sr86][0]-mains_process[Sr86][0])/solar[Sr86][0])
-# qq3 = np.log10((solar[Sr87][0]-mains_process[Sr87][0])/solar[Sr87][0])
+aa3 = np.log10((solar[Ge70][0]-mains_process[Ge70][0])/solar[Ge70][0])
+bb3 = np.log10((solar[Se76][0]-mains_process[Se76][0])/solar[Se76][0])
+cc3 = np.log10((solar[Kr80][0]-mains_process[Kr80][0])/solar[Kr80][0])
+dd3 = np.log10((solar[Kr82][0]-mains_process[Kr82][0])/solar[Kr82][0])
+ww3 = np.log10((solar[Sr86][0]-mains_process[Sr86][0])/solar[Sr86][0])
+qq3 = np.log10((solar[Sr87][0]-mains_process[Sr87][0])/solar[Sr87][0])
 
 aa3 = np.log10((solarM[Ge70][0])/solar[Ge70][0])
 bb3 = np.log10((solarM[Se76][0])/solar[Se76][0])
@@ -363,7 +373,7 @@ qq3 = np.log10((solarM[Sr87][0])/solar[Sr87][0])
 
 
 
-array = np.array([a3,b3,c3,d3,w3,q3])
+# array = np.array([a3,b3,c3,d3,w3,q3])
 array2 = np.array([aa3,bb3,cc3,dd3,ww3,qq3])
 
 
@@ -375,9 +385,10 @@ plt.ylabel("log10(weak/solar)")
 plt.title("weak tau,f")
 # adding axes
 axes.scatter(mass,np.log10(finalRatio), marker='.')
-axes.scatter(sOnlyM, array, marker = 's')
+# axes.scatter(sOnlyM, array, marker = 's')
+axes.scatter(sOnlyM, Ys, marker = 's')
 axes.scatter(sOnlyM, array2, marker = '*')
 axes.set_xlim([56,105])
 axes.set_ylim([-5,1])
-# plt.axhline(y=0, color='r', linestyle='--')
+plt.axhline(y=0, color='r', linestyle='--')
 plt.show()

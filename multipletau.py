@@ -164,10 +164,9 @@ sig=w_cs(ion,nion)
 
 def multipleTau(numberE):
 
-    numEquations = numberE
-    fraction = symbols('f0:%d'%numEquations)
-    tauValue = symbols('k0:%d'%numEquations)
-
+    numEquations = numberE+1
+    fraction = symbols('f1:%d'%numEquations)
+    tauValue = symbols('k1:%d'%numEquations)
     finalSum = np.empty(numberE, dtype = "object")
 
     for j in range(numberE):
@@ -248,12 +247,13 @@ def multipleTau(numberE):
             final[i] = init3
 
         final = final * factorOne
-        final = final/sig
+        for i in range(sig.shape[0]):
+            final[9] = final[i]/sig[i]
 
         finalSum[j] = final
 
     finalTotal = np.sum(finalSum)
-
+    print('Got final total!')
     return finalTotal
 
 
@@ -263,6 +263,7 @@ Kr80=np.where(nion == 'kr80')
 Kr82=np.where(nion == 'kr82')
 Sr86=np.where(nion == 'sr86')
 Sr87=np.where(nion == 'sr87')
+print('solarM',solarM[Ge70[0][0]])
 #
 # ge70Value = final[Ge70][0]
 # se76Value = final[Se76][0]
@@ -270,5 +271,5 @@ Sr87=np.where(nion == 'sr87')
 # kr82Value = final[Kr82][0]
 # sr86Value = final[Sr86][0]
 # sr87Value = final[Sr87][0]
-multipleFinal= multipleTau(3)
-print(multipleFinal[Ge70])
+# multipleFinal= multipleTau(3)
+# print(multipleFinal[Ge70])
